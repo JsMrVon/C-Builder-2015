@@ -1,0 +1,90 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "Unit1.h"
+#include <complex.h>
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TForm1 *Form1;
+complex base(300,200), h(0,1), m(0,1), s(0,1);
+//---------------------------------------------------------------------------
+__fastcall TForm1::TForm1(TComponent* Owner)
+        : TForm(Owner)
+{
+
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Button1Click(TObject *Sender)
+{
+    complex a(0,5);
+    this->Caption=(a/polar(M_PI/4)).str();    
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Timer1Timer(TObject *Sender)
+{
+    float r=150;
+    complex a, b;
+    Canvas->Ellipse(base.x-r,base.y-r,base.x+r,base.y+r);
+    Canvas->Pen->Color=clYellow;
+    for(int i=0; i<12; i++){
+        a=0.85*r*polar(M_PI/6*i);
+        b=r*polar(M_PI/6*i);
+        a=base+a.conj();
+        b=base+b.conj();
+        Canvas->MoveTo(a.x, a.y);
+        Canvas->LineTo(b.x, b.y);
+    }
+    for(int i=0; i<60; i++){
+        a=0.95*r*polar(M_PI/30*i);
+        b=r*polar(M_PI/30*i);
+        a=base+a.conj();
+        b=base+b.conj();
+        Canvas->MoveTo(a.x, a.y);
+        Canvas->LineTo(b.x, b.y);
+    }
+    //минутные отметки
+    //стрелки
+    a=-0.15*r*s;
+    b=0.8*r*s;
+    a=base+a.conj();
+    b=base+b.conj();
+    Canvas->Pen->Color=clYellow;
+    Canvas->MoveTo(a.x,a.y);
+    Canvas->LineTo(b.x,b.y);
+    s=s/polar(M_PI/30);
+
+    a=-0.15*r*m;
+    b=0.7*r*m;
+    a=base+a.conj();
+    b=base+b.conj();
+    Canvas->Pen->Color=clRed;
+    Canvas->MoveTo(a.x,a.y);
+    Canvas->LineTo(b.x,b.y);
+    m=m/polar(M_PI/30/60);
+
+    a=-0.15*r*h;
+    b=0.6*r*h;
+    a=base+a.conj();
+    b=base+b.conj();
+    Canvas->Pen->Color=clMaroon;
+    Canvas->MoveTo(a.x,a.y);
+    Canvas->LineTo(b.x,b.y);
+    h=h/polar(M_PI/30/60/60);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::FormKeyDown(TObject *Sender, WORD &Key,
+      TShiftState Shift)
+{
+    if(Key==VK_F1) {
+        Label1->Visible=!Label1->Visible;
+    }
+}
+//---------------------------------------------------------------------------
+
+
+
